@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNBT Squad Portal 🚀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffdde1;
+            --main-color: #ff6b6b;
+            --accent-color: #4ecdc4;
+            --text-color: #2d3436;
+            --chat-user-bg: #ffeaa7;
+            --chat-bot-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ee9ca7, #ffdde1);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Main Container --- */
+        .portal-container {
+            width: 380px;
+            height: 85vh;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 5px solid #fff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            padding: 20px;
+            background: var(--main-color);
+            color: white;
+            text-align: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px rgba(0,0,0,0.1);
+        }
+
+        /* --- Menu Section --- */
+        .menu-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            padding: 20px;
+            transition: 0.5s;
+        }
+
+        .menu-btn {
+            width: 100%;
+            padding: 20px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+            text-shadow: 1px 1px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 0 #b2bec3;
+            position: relative;
+        }
+
+        .menu-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b2bec3;
+        }
+
+        .btn-curhat { background-color: #ff7675; box-shadow: 0 8px 0 #d63031; }
+        .btn-curhat:hover { background-color: #fab1a0; }
+
+        .btn-english { background-color: #0984e3; box-shadow: 0 8px 0 #0764ad; }
+        .btn-english:hover { background-color: #74b9ff; }
+
+        .subtitle {
+            font-size: 12px;
+            color: #636e72;
+            margin-top: -15px;
+            text-align: center;
+        }
+
+        /* --- Feature Screens (Curhat & English) --- */
+        .feature-screen {
+            position: absolute;
+            top: 60px; /* Below Header */
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: 0.5s ease-in-out;
+            visibility: hidden;
+        }
+
+        .feature-screen.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .screen-header {
+            padding: 10px 15px;
+            background: #f1f2f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .back-btn {
+            background: none; border: none; font-size: 20px; cursor: pointer; color: var(--main-color);
+        }
+
+        /* --- Curhat Screen Styles --- */
+        #chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #fdfcfc;
+        }
+
+        .bubble {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 13px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .user { align-self: flex-end; background: var(--chat-user-bg); color: var(--text-color); border-bottom-right-radius: 2px; }
+        .bot { align-self: flex-start; background: var(--chat-bot-bg); color: var(--text-color); border-bottom-left-radius: 2px; border: 1px solid #eee; }
+
+        .chat-controls {
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            background: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 13px;
+            resize: none;
+            height: 40px;
+        }
+
+        .icon-btn {
+            background: none; border: none; font-size: 24px; cursor: pointer; color: var(--main-color); transition: 0.2s;
+        }
+        .icon-btn:hover { transform: scale(1.1); }
+        .recording { color: #d63031; animation: pulse 1s infinite; }
+
+        /* --- English Screen Styles --- */
+        #english-screen {
+            background: #e6f7ff;
+        }
+
+        .level-container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .level-card {
+            width: 90%;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .level-card:hover { border-color: #0984e3; transform: translateY(-3px); }
+        .level-card.locked { opacity: 0.6; cursor: not-allowed; }
+
+        .level-info h3 { margin: 0; font-family: 'Fredoka One', cursive; color: #0984e3; }
+        .level-info p { margin: 5px 0 0; font-size: 12px; color: #636e72; }
+
+        .status-icon { font-size: 24px; }
+
+        .practice-area {
+            padding: 20px;
+            background: #fff;
+            border-top: 2px solid #0984e3;
+            text-align: center;
+        }
+
+        #target-text { font-weight: bold; color: #2d3436; margin-bottom: 10px; }
+        #feedback-text { font-size: 12px; margin-top: 10px; min-height: 1.2em; }
+
+        /* --- Animations --- */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="portal-container">
+    <div class="header">SNBT SQUAD 🚀</div>
+
+    <div class="menu-screen" id="menu-screen">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <span style="font-size: 50px;">🎒</span>
+            <p style="font-size: 14px; color: #636e72;">Welcome, Pejuang Kampus!</p>
+        </div>
+        
+        <button class="menu-btn btn-curhat" onclick="openScreen('curhat-screen')">✨ Bestie Curhat AI</button>
+        <p class="subtitle">Lagi galau SNBT? Tumpahin semua di sini.</p>
+
+        <button class="menu-btn btn-english" onclick="openScreen('english-screen')">🗣️ English Master</button>
+        <p class="subtitle">Latihan Voice Voice biar skor SNBT gacor!</p>
+    </div>
+
+    <div class="feature-screen" id="curhat-screen">
+        <div class="screen-header">
+            <button class="back-btn" onclick="closeScreens()">🔙</button>
+            <span style="font-family: 'Fredoka One', cursive; color: #ff7675;">Bestie Curhat</span>
+            <select id="lang-select-curhat" style="font-size: 12px;">
+                <option value="id-ID">🇮🇩 Indo</option>
+                <option value="en-US">🇺🇸 Eng</option>
+            </select>
+        </div>
+        <div id="chat-box">
+            <div class="bubble bot">Woy Pejuang SNBT! 🔥 Lagi pusing ya? Sini cerita sama gua, panjang lebar juga gapapa. Gua dengerin kok. Pake teks atau pencet mic di bawah!</div>
+        </div>
+        <div class="chat-controls">
+            <textarea id="chat-input" placeholder="Tulis curhatan lu..."></textarea>
+            <button class="icon-btn" id="send-btn">🕊️</button>
+            <button class="icon-btn" id="mic-btn-curhat">🎤</button>
+        </div>
+    </div>
+
+    <div class="feature-screen" id="english-screen">
+        <div class="screen-header">
+            <button class="back-btn" onclick="closeScreens()">🔙</button>
+            <span style="font-family: 'Fredoka One', cursive; color: #0984e3;">English Master</span>
+            <span>🏆</span>
+        </div>
+        
+        <div class="level-container">
+            <div class="level-card" onclick="startLevel(1)">
+                <div class="level-info">
+                    <h3>Level 1: Daily Conversation</h3>
+                    <p>Misi: Ngomong halo & perkenalan diri buat maba.</p>
+                </div>
+                <div class="status-icon">✅</div>
+            </div>
+            <div class="level-card" onclick="startLevel(2)">
+                <div class="level-info">
+                    <h3>Level 2: Campus Life</h3>
+                    <p>Misi: Nanya arah perpustakaan di kampus.</p>
+                </div>
+                <div class="status-icon">🔒</div>
+            </div>
+            <div class="level-card locked">
+                <div class="level-info">
+                    <h3>Level 3: SNBT Reading</h3>
+                    <p>Misi: Baca teks bahasa inggris SNBT dengan benar.</p>
+                </div>
+                <div class="status-icon">🔒</div>
+            </div>
+        </div>
+
+        <div class="practice-area" id="practice-area" style="display: none;">
+            <p style="font-size: 12px; color: #636e72;">Ucapkan kalimat ini:</p>
+            <p id="target-text">"Hello, my name is [Your Name], and I am ready for UTBK!"</p>
+            <button class="icon-btn" id="mic-btn-english" style="color: #0984e3;">🎤</button>
+            <p id="feedback-text"></p>
+            <button class="menu-btn btn-english" style="padding: 10px; font-size: 14px; margin-top: 10px;" onclick="backToLevels()">Back to Levels</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- NAVIGASI ---
+    function openScreen(screenId) {
+        document.getElementById('menu-screen').style.display = 'none';
+        document.querySelectorAll('.feature-screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function closeScreens() {
+        document.getElementById('menu-screen').style.display = 'flex';
+        document.querySelectorAll('.feature-screen').forEach(s => s.classList.remove('active'));
+        stopSpeaking(); // Stop AI voice if speaking
+    }
+
+    // --- FITUR UMUM: SUARA ---
+    const synth = window.speechSynthesis;
+    let recognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Yah, browsermu nggak support fitur suara. Pake Google Chrome versi terbaru ya biar gacor!");
+    } else {
+        recognition = new SpeechRecognition();
+    }
+
+    function speak(text, lang) {
+        stopSpeaking();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang;
+        utter.pitch = 1.1; // Slighting higher pitch for cute/friendly voice
+        utter.rate = 1;
+        synth.speak(utter);
+    }
+
+    function stopSpeaking() {
+        if (synth.speaking) {
+            synth.cancel();
+        }
+    }
+
+    // --- LOGIKA: CURHAT ---
+    const chatInput = document.getElementById('chat-input');
+    const chatBox = document.getElementById('chat-box');
+    const sendBtn = document.getElementById('send-btn');
+    const micBtnCurhat = document.getElementById('mic-btn-curhat');
+    const langSelectCurhat = document.getElementById('lang-select-curhat');
+
+    function addBubble(text, sender) {
+        const div = document.createElement('div');
+        div.className = `bubble ${sender}`;
+        div.innerText = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Simulasi jawaban panjang AI (KARENA BELUM PAKAI API REAL)
+    function simulateAIResponse(userInput) {
+        const lang = langSelectCurhat.value;
+        let response = "";
+
+        if (lang === 'id-ID') {
+            response = "Waduh... denger cerita lu, gua paham banget sih rasanya capek dan *burnout* ngerjain soal-soal SNBT tiap hari. Lu udah hebat banget tauk bisa bertahan sampai titik ini! Jangan terlalu keras sama diri sendiri ya. *Remember to take a break*. Masa depan lu cerah kok, percaya sama prosesnya. Gua bakal selalu di sini kalau lu mau tumpahin semuanya lagi. Semangat terus, jangan kasih kendor! 🔥🎒";
+        } else {
+            response = "Wow, hearing your story makes me understand how tired and burnt out you must feel working on SNBT questions every day. You are already amazing to have made it this far! Don't be too hard on yourself. Remember to take a break. Your future is bright, trust the process. I'll always be here if you want to spill everything again. Keep going, don't give up! 🔥🎒";
+        }
+
+        setTimeout(() => {
+            addBubble(response, 'bot');
+            speak(response, lang);
+        }, 1500);
+    }
+
+    // Kirim pakai Tombol
+    sendBtn.onclick = () => {
+        const text = chatInput.value.trim();
+        if (text) {
+            addBubble(text, 'user');
+            chatInput.value = '';
+            simulateAIResponse(text);
+        }
+    };
+
+    // Curhat pakai Mic
+    micBtnCurhat.onclick = () => {
+        const lang = langSelectCurhat.value;
+        recognition.lang = lang;
+        recognition.start();
+        micBtnCurhat.classList.add('recording');
+        stopSpeaking();
+    };
+
+    if (recognition) {
+        recognition.onresult = (event) => {
+            micBtnCurhat.classList.remove('recording');
+            const text = event.results[0][0].transcript;
+            if(document.getElementById('curhat-screen').classList.contains('active')){
+                addBubble(text, 'user');
+                simulateAIResponse(text);
+            }
+        };
+        recognition.onerror = () => {
+            micBtnCurhat.classList.remove('recording');
+        }
+    }
+
+    // --- LOGIKA: ENGLISH MASTER (SNBT) ---
+    const practiceArea = document.getElementById('practice-area');
+    const levelContainer = document.querySelector('.level-container');
+    const targetTextEl = document.getElementById('target-text');
+    const feedbackTextEl = document.getElementById('feedback-text');
+    const micBtnEnglish = document.getElementById('mic-btn-english');
+    let currentTargetText = "";
+
+    function startLevel(level) {
+        levelContainer.style.display = 'none';
+        practiceArea.style.display = 'block';
+        
+        if (level === 1) {
+            currentTargetText = "Hello, my name is [Your Name], and I am ready for UTBK!";
+        } else if (level === 2) {
+            currentTargetText = "Excuse me, could you please tell me where the campus library is?";
+        }
+        targetTextEl.innerText = currentTargetText;
+        feedbackTextEl.innerText = "";
+        feedbackTextEl.style.color = "inherit";
+    }
+
+    function backToLevels() {
+        practiceArea.style.display = 'none';
+        levelContainer.style.display = 'flex';
+        stopSpeaking();
+    }
+
+    // Mic buat English Practice
+    micBtnEnglish.onclick = () => {
+        recognition.lang = 'en-US';
+        recognition.start();
+        micBtnEnglish.classList.add('recording');
+        feedbackTextEl.innerText = "Listening...";
+        stopSpeaking();
+    };
+
+    if (recognition) {
+        recognition.addEventListener('result', (event) => {
+             if(document.getElementById('english-screen').classList.contains('active') && practiceArea.style.display === 'block'){
+                micBtnEnglish.classList.remove('recording');
+                const spokenText = event.results[0][0].transcript.toLowerCase().replace(/[^\w\s]/gi, ''); // clean punctuation
+                const cleanTarget = currentTargetText.toLowerCase().replace(/\[your name\]/g, '').replace(/[^\w\s]/gi, '').trim();
+
+                // Simple check: if spoken text contains main parts of target text (karena nama user beda-beda)
+                if (spokenText.includes("hello my name is") && spokenText.includes("i am ready for utbk")) {
+                    feedbackTextEl.innerText = "🔥 GACOR! Pronunciation lu mantap. Mission Accomplished!";
+                    feedbackTextEl.style.color = "#2ecc71";
+                    speak("Excellent! Level one completed.", "en-US");
+                    // Nanti di sini bisa tambahin logika buat unlock level 2
+                } else if (level === 2 && spokenText.includes("could you please tell me where the campus library is")){
+                     feedbackTextEl.innerText = "🔥 COOL! Level two completed.";
+                    feedbackTextEl.style.color = "#2ecc71";
+                    speak("Well done! You are ready for campus life.", "en-US");
+                } else {
+                    feedbackTextEl.innerText = "Hmm, coba lagi yuk! Pastikan ngomongnya jelas sesuai kalimat di atas.";
+                    feedbackTextEl.style.color = "#e74c3c";
+                    speak("Try again, you can do it!", "en-US");
+                }
+             }
+        });
+        
+        recognition.addEventListener('error', () => {
+             micBtnEnglish.classList.remove('recording');
+             if(document.getElementById('english-screen').classList.contains('active')){
+                feedbackTextEl.innerText = "Error hearing you. Please try again.";
+             }
+        });
+    }
+
+</script>
+
+</body>
+</html>
